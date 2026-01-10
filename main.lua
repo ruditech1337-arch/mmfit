@@ -7,7 +7,7 @@ print("FishIt Complete Monitor Starting...")
 
 -- Load modules
 local FishingMonitor = loadstring(game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/monitor.lua"))()
-local FishingGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/gui_module.lua"))()
+local FishingGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/gui.lua"))()
 
 -- Configuration
 FishingMonitor:SetFishWebhookURL("URL_DISCORD_FISH")
