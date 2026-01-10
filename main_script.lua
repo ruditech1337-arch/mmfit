@@ -1,10 +1,10 @@
--- main_script.lua - SCRIPT UTAMA UNTUK DIEXEKUSI
+-- main_script.lua - SCRIPT UTAMA YANG DIUPDATE
 local Players = game:GetService("Players")
 
 -- Tunggu game load
 repeat task.wait() until game:IsLoaded()
 print("========================================")
-print("🎣 FishIt Complete Monitor")
+print("🎣 FishIt Complete Monitor v2.0")
 print("Starting...")
 print("========================================")
 
@@ -15,72 +15,95 @@ local FishingMonitor, FishingGUI
 local success1, err1 = pcall(function()
     local code = game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/monitor.lua")
     FishingMonitor = loadstring(code)()
-    print("✅ FishingMonitor loaded")
+    print("✅ FishingMonitor module loaded")
 end)
 
 if not success1 then
-    warn("❌ Failed to load monitor:", err1)
+    warn("❌ Failed to load monitor module:", err1)
+    FishingMonitor = nil
 end
 
 -- Load GUI module
 local success2, err2 = pcall(function()
     local code = game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/gui_module.lua")
     FishingGUI = loadstring(code)()
-    print("✅ FishingGUI loaded")
+    print("✅ FishingGUI module loaded")
 end)
 
 if not success2 then
-    warn("❌ Failed to load GUI:", err2)
+    warn("❌ Failed to load GUI module:", err2)
     FishingGUI = nil
 end
 
 -- ============================================
--- KONFIGURASI
+-- KONFIGURASI MONITOR
 -- ============================================
 if FishingMonitor then
-    -- GANTI DENGAN WEBHOOK KAMU
-    FishingMonitor:SetFishWebhookURL("https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5")
-    FishingMonitor:SetMonitorWebhookURL("https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5")
-    FishingMonitor:SetUpdateInterval(30)
+    -- SET YOUR DISCORD WEBHOOKS HERE!
+    local FISH_WEBHOOK = "https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5"
+    local MONITOR_WEBHOOK = "https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5"
+    
+    -- Configure monitor
+    FishingMonitor:SetFishWebhookURL(FISH_WEBHOOK)
+    FishingMonitor:SetMonitorWebhookURL(MONITOR_WEBHOOK)
+    FishingMonitor:SetDiscordUserID("") -- Your Discord ID
+    FishingMonitor:SetUpdateInterval(30) -- Update every 30 seconds
     FishingMonitor:SetDebugMode(true)
-    print("✅ Monitor configured")
+    
+    print("✅ Monitor configuration complete")
+else
+    warn("⚠️ Cannot configure monitor - module not loaded")
 end
 
 -- ============================================
 -- INISIALISASI GUI
 -- ============================================
 if FishingGUI then
-    local guiSuccess = FishingGUI:Init()
+    print("\n[GUI] Initializing GUI system...")
+    
+    local guiSuccess, guiErr = pcall(function()
+        return FishingGUI:Init()
+    end)
+    
     if guiSuccess then
-        print("✅ GUI initialized")
+        print("✅ GUI system initialized")
         
-        -- Welcome message
-        FishingGUI:ShowStatusMessage("FishIt Monitor Active!")
+        -- Show welcome message
+        FishingGUI:ShowStatusMessage("🎣 FishIt Monitor Active!")
         
-        -- Test setelah 3 detik
+        -- Run test after 3 seconds
         task.delay(3, function()
+            print("[GUI] Running test notifications...")
             FishingGUI:Test()
         end)
         
-        -- Bind ke monitor
+        -- Bind to monitor if available
         if FishingMonitor then
             FishingGUI:BindToMonitor(FishingMonitor)
+            print("✅ GUI bound to Monitor")
         end
     else
-        warn("❌ GUI init failed")
+        warn("❌ GUI initialization failed:", guiErr)
     end
+else
+    warn("⚠️ GUI module not available")
 end
 
 -- ============================================
--- START MONITOR
+-- START MONITORING SYSTEM
 -- ============================================
 if FishingMonitor then
+    print("\n[Monitor] Starting monitoring system...")
+    
     task.delay(2, function()
-        local monitorSuccess = FishingMonitor:Start()
+        local monitorSuccess, monitorErr = pcall(function()
+            return FishingMonitor:Start()
+        end)
+        
         if monitorSuccess then
-            print("✅ Monitor started")
+            print("✅ Monitoring system started successfully!")
             
-            -- Update GUI stats setelah 5 detik
+            -- Update GUI with initial data
             if FishingGUI then
                 task.delay(5, function()
                     local data = FishingMonitor:GetServerData()
@@ -92,46 +115,54 @@ if FishingMonitor then
                             secrets = data.TotalSecrets or 0,
                             mutations = data.TotalMutations or 0
                         })
+                        print("✅ Server stats displayed in GUI")
                     end
                 end)
             end
         else
-            warn("❌ Monitor start failed")
+            warn("❌ Failed to start monitor:", monitorErr)
         end
     end)
+else
+    warn("⚠️ Cannot start monitor - module not loaded")
 end
 
 -- ============================================
--- CONTROLS
+-- KEYBIND CONTROLS
 -- ============================================
 local UserInputService = game:GetService("UserInputService")
 
-UserInputService.InputBegan:Connect(function(input)
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    -- P key: Test notifications
     if input.KeyCode == Enum.KeyCode.P then
         if FishingGUI then
-            print("Manual test triggered")
+            print("[Manual] Test triggered")
             FishingGUI:Test()
         end
     end
     
+    -- Right Control: Toggle GUI
     if input.KeyCode == Enum.KeyCode.RightControl then
         if FishingGUI then
-            local currentState = true
-            FishingGUI:Toggle(not currentState)
-            print("GUI toggled")
+            FishingGUI:Toggle()
+            print("[Manual] GUI toggled")
         end
     end
 end)
 
 print("\n========================================")
 print("✅ SETUP COMPLETE!")
+print("========================================")
 print("Controls:")
 print("- P: Test notifications")
 print("- Right Ctrl: Toggle GUI")
 print("========================================")
+print("Waiting for fishing activity...")
+print("========================================")
 
--- Keep alive
+-- Keep script alive
 while true do
     task.wait(10)
-    print("🎣 Monitor still running...")
 end
