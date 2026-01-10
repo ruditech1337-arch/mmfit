@@ -17,13 +17,13 @@ task.wait(2)
 
 -- Load modules (sesuaikan path)
 local success, FishingMonitor = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/.../FishingMonitor.lua"))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/monitor.lua"))()
     -- ATAU jika Anda simpan di workspace:
     -- return require(game:GetService("ReplicatedStorage"):WaitForChild("FishingMonitor"))
 end)
 
 local success2, FishingGUI = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/.../FishingGUI.lua"))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/gui.lua"))()
     -- ATAU:
     -- return require(game:GetService("ReplicatedStorage"):WaitForChild("FishingGUI"))
 end)
@@ -41,8 +41,8 @@ end
 -- Configuration
 if FishingMonitor then
     -- SET WEBHOOK URL ANDA DI SINI!
-    FishingMonitor:SetFishWebhookURL("") -- Webhook untuk fish caught
-    FishingMonitor:SetMonitorWebhookURL("") -- Webhook untuk server monitor
+    FishingMonitor:SetFishWebhookURL("https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5") -- Webhook untuk fish caught
+    FishingMonitor:SetMonitorWebhookURL("https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5") -- Webhook untuk server monitor
     FishingMonitor:SetDiscordUserID("") -- Discord ID Anda
     FishingMonitor:SetUpdateInterval(30)
     FishingMonitor:SetDebugMode(true)
