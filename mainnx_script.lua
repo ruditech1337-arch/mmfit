@@ -13,7 +13,7 @@ local FishingMonitor, FishingGUI
 
 -- Load monitor module
 local success1, err1 = pcall(function()
-    local code = game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/monitor.lua")
+    local code = game:HttpGet("https://raw.githubusercontent.com/ruditech1337-arch/mmfit/refs/heads/main/monitor_complete.lua")
     FishingMonitor = loadstring(code)()
     print("✅ FishingMonitor module loaded")
 end)
@@ -40,7 +40,7 @@ end
 -- ============================================
 if FishingMonitor then
     -- SET YOUR DISCORD WEBHOOKS HERE!
-    local FISH_WEBHOOK = "https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5"
+    local FISH_WEBHOOK = "https://discord.com/api/webhooks/1459313509761548510/mA3k8M_gEgfZtnhTpCfODjF-MjN-oDEbmhehw1qxVUBxBgFVKq6aSqSRbI3F20i60G53"
     local MONITOR_WEBHOOK = "https://discord.com/api/webhooks/1441282008360816672/CmvOOKuQnX3a90emvGSrvrhWml52_LbujYKTmQs1hnf2zLmKs2EpkUnljs6q13K_bEr5"
     
     -- Configure monitor
